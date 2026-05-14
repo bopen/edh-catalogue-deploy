@@ -61,7 +61,8 @@ jobs:
         cd bopen/edh-catalogue-deploy
         git config user.name "github-actions"
         git config user.email ""
-        git checkout -b update-uv-lock
+        git fetch --all
+        git checkout update-uv-lock
         git add uv.lock
         git commit -m "🤖 Update uv lock"
         git push
