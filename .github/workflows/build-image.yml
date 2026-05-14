@@ -76,6 +76,7 @@ jobs:
         body: "This Pull Request has been automatically created by the workflow to update the uv lock file."
         base: main
         branch: update-uv-lock
+        path: bopen/edh-catalogue-deploy
         assignees: francesconazzaro
     - name: Fail if uv lock is not up to date
       if: steps.check_uv_lock.outputs.UV_CHECK == 'not_ok'
