@@ -50,6 +50,14 @@ jobs:
         uv lock --check && UV_CHECK='ok' || UV_CHECK='not_ok'
         echo "UV_CHECK=$UV_CHECK" >> $GITHUB_OUTPUT
         cat $GITHUB_OUTPUT
+    - name: Checkout update-uv-lock branch
+      if: steps.check_uv_lock.outputs.UV_CHECK == 'not_ok'
+      run: |
+        cd bopen/edh-catalogue-deploy
+        git config user.name "github-actions"
+        git config user.email ""
+        git fetch --all
+        git checkout update-uv-lock
     - name: Update uv lock
       if: steps.check_uv_lock.outputs.UV_CHECK == 'not_ok'
       run: |
@@ -59,13 +67,9 @@ jobs:
       if: steps.check_uv_lock.outputs.UV_CHECK == 'not_ok'
       run: |
         cd bopen/edh-catalogue-deploy
-        git config user.name "github-actions"
-        git config user.email ""
-        git fetch --all
-        git checkout update-uv-lock
         git add uv.lock
         git commit -m "🤖 Update uv lock"
-        git push
+        git push origin update-uv-lock
     - name: Create Pull Request
       if: steps.check_uv_lock.outputs.UV_CHECK == 'not_ok'
       uses: peter-evans/create-pull-request@v5
