@@ -48,6 +48,7 @@ jobs:
         cd bopen/edh-catalogue-deploy
         uv lock --check 2>&1
         echo UV_CHECK=$? >> $GITHUB_OUTPUT
+        echo $GITHUB_OUTPUT
     - name: Update uv lock
       if: steps.check-uv-lock.outputs.UV_CHECK != '0'
       run: |
