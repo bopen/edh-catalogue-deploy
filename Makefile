@@ -1,2 +1,2 @@
 build:
-	docker build -t edh-catalogue -f Dockerfile .. 
+	docker build -t edh-catalogue -f Dockerfile ..

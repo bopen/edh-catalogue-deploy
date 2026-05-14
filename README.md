@@ -9,8 +9,9 @@ This repository is a dedicated deployment environment for the EDH Catalogue syst
 
 Because this project relies on a local workspace, the repositories **must** be cloned side-by-side in the same parent directory before running `uv` or building the Docker image.
 
-```text
+~~~text
 your-working-directory/
 ├── edh-catalogue-api/        # Sibling repository
 ├── edh-catalogue-manager/    # Sibling repository
 └── edh-catalogue-deploy/     # This repository
+~~~

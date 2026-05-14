@@ -114,6 +114,7 @@ jobs:
         echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
         cat grype-report-edh-catalogue-api-${{ github.run_id }}.txt >> $GITHUB_STEP_SUMMARY
         echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+
   release-e2e:
     name: Trigger GitLab pipeline for release-edh-catalogue-api-e2e
     runs-on: ubuntu-latest
