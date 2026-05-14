@@ -3,7 +3,7 @@ name = "edh-catalogue-deploy"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.14"
 dependencies = [
     "edh-catalogue-api",
     "edh-catalogue-manager"
