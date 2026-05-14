@@ -54,7 +54,7 @@ jobs:
       if: steps.check_uv_lock.outputs.UV_CHECK == 'not_ok'
       run: |
         cd bopen/edh-catalogue-deploy
-        uv lock --all-extras
+        uv lock
     - name: Commit and push uv lock changes
       if: steps.check_uv_lock.outputs.UV_CHECK == 'not_ok'
       run: |
