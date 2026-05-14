@@ -1,0 +1,26 @@
+[project]
+name = "edh-catalogue-deploy"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "edh-catalogue-api",
+    "edh-catalogue-manager"
+]
+
+[tool.uv]
+package = false
+override-dependencies = [
+    "edh-catalogue-manager"
+]
+
+[tool.uv.workspace]
+members = [
+    "../edh-catalogue-api",
+    "../edh-catalogue-manager"
+]
+
+[tool.uv.sources]
+edh-catalogue-api = { workspace = true }
+edh-catalogue-manager = { workspace = true }
