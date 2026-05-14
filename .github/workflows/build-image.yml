@@ -46,16 +46,16 @@ jobs:
     - name: Check if uv lock is up to date
       run: |
         cd bopen/edh-catalogue-deploy
-        uv lock --check 2>&1
-        echo UV_CHECK=$? >> $GITHUB_OUTPUT
+        if uv lock --check; then; UV_CHECK='ok'; else; UV_CHECK='not_ok'; fi
+        echo UV_CHECK=$UV_CHECK >> $GITHUB_OUTPUT
         echo $GITHUB_OUTPUT
     - name: Update uv lock
-      if: steps.check-uv-lock.outputs.UV_CHECK != '0'
+      if: steps.check-uv-lock.outputs.UV_CHECK == 'not_ok'
       run: |
         cd bopen/edh-catalogue-deploy
         uv lock --all-extras
     - name: Commit and push uv lock changes
-      if: steps.check-uv-lock.outputs.UV_CHECK != '0'
+      if: steps.check-uv-lock.outputs.UV_CHECK == 'not_ok'
       run: |
         cd bopen/edh-catalogue-deploy
         git config user.name "github-actions"
@@ -65,7 +65,7 @@ jobs:
         git commit -m "🤖 Update uv lock"
         git push
     - name: Create Pull Request
-      if: steps.check-uv-lock.outputs.UV_CHECK != '0'
+      if: steps.check-uv-lock.outputs.UV_CHECK == 'not_ok'
       uses: peter-evans/create-pull-request@v5
       with:
         token: ${{ secrets.GIT_PAT }}
@@ -76,7 +76,7 @@ jobs:
         head: update-uv-lock
         assignees: francesconazzaro
     - name: Fail if uv lock is not up to date
-      if: steps.check-uv-lock.outputs.UV_CHECK != '0'
+      if: steps.check-uv-lock.outputs.UV_CHECK == 'not_ok'
       run: |
         echo "A Pull Request has been opened to update the uv lock file."
         exit 1
