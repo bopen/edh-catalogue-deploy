@@ -23,8 +23,9 @@ env:
   IMAGE_TAG: ${{ inputs.image_tag || github.ref_name }}
 
 jobs:
-  build-docker-image:
-    name: Build edh-catalogue-api:${{ inputs.image_tag || github.ref_name }}
+
+  check-uv-lock:
+    name: Check if uv lock is up to date
     runs-on: ubuntu-latest
     steps:
     - name: Clone edh-catalogue-deploy repository
@@ -37,10 +38,53 @@ jobs:
         # grep -v '^#' ignores comment lines
         # grep -v '^$' ignores empty lines
         grep -v '^#' bopen/edh-catalogue-deploy/environment.release | grep -v '^$' >> $GITHUB_ENV
-    - uses: bopen/ci-cd/git-clone@main
+    - name: Clone edh-catalogue-api and edh-catalogue-manager repositories
+      uses: bopen/ci-cd/git-clone@main
       with:
         repo-list: "bopen/edh-catalogue-api bopen/edh-catalogue-manager"
         git-pat: ${{ secrets.GIT_PAT }}
+    - name: Check if uv lock is up to date
+      run: |
+        cd bopen/edh-catalogue-deploy
+        uv lock --check 2>&1
+        echo UV_CHECK=$? >> $GITHUB_OUTPUT
+    - name: Update uv lock
+      if: steps.check-uv-lock.outputs.UV_CHECK != '0'
+      run: |
+        cd bopen/edh-catalogue-deploy
+        uv lock --all-extras
+    - name: Commit and push uv lock changes
+      if: steps.check-uv-lock.outputs.UV_CHECK != '0'
+      run: |
+        cd bopen/edh-catalogue-deploy
+        git config user.name "github-actions"
+        git config user.email ""
+        git checkout -b update-uv-lock
+        git add uv.lock
+        git commit -m "🤖 Update uv lock"
+        git push
+    - name: Create Pull Request
+      if: steps.check-uv-lock.outputs.UV_CHECK != '0'
+      uses: peter-evans/create-pull-request@v5
+      with:
+        token: ${{ secrets.GIT_PAT }}
+        commit-message: "🤖 Update uv lock"
+        title: "🤖 Update uv lock"
+        body: "This Pull Request has been automatically created by the workflow to update the uv lock file."
+        base: main
+        head: update-uv-lock
+        assignees: francesconazzaro
+    - name: Fail if uv lock is not up to date
+      if: steps.check-uv-lock.outputs.UV_CHECK != '0'
+      run: |
+        echo "A Pull Request has been opened to update the uv lock file."
+        exit 1
+
+  build-docker-image:
+    name: Build edh-catalogue-api:${{ inputs.image_tag || github.ref_name }}
+    needs: check-uv-lock
+    runs-on: ubuntu-latest
+    steps:
     - name: Harbor login
       uses: docker/login-action@v3
       with:
