@@ -49,7 +49,7 @@ jobs:
         cd bopen/edh-catalogue-deploy
         uv lock --check && UV_CHECK='ok' || UV_CHECK='not_ok'
         echo "UV_CHECK=$UV_CHECK" >> $GITHUB_OUTPUT
-        echo $GITHUB_OUTPUT
+        cat $GITHUB_OUTPUT
     - name: Update uv lock
       if: steps.check_uv_lock.outputs.UV_CHECK == 'not_ok'
       run: |
