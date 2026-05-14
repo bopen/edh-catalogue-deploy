@@ -37,7 +37,7 @@ jobs:
         # grep -v '^#' ignores comment lines
         # grep -v '^$' ignores empty lines
         grep -v '^#' environment.release | grep -v '^$' >> $GITHUB_ENV
-    - uses: bopen/ci-cd/git-clone
+    - uses: bopen/ci-cd/git-clone@main
       with:
         repo-list: "bopen/edh-catalogue-api bopen/edh-catalogue-manager"
         git-pat: ${{ secrets.GIT_PAT }}
