@@ -46,7 +46,12 @@ jobs:
     - name: Check if uv lock is up to date
       run: |
         cd bopen/edh-catalogue-deploy
-        if uv lock --check; then; UV_CHECK='ok'; else; UV_CHECK='not_ok'; fi
+        if uv lock --check
+        then
+          UV_CHECK='ok'
+        else
+          UV_CHECK='not_ok'
+        fi
         echo UV_CHECK=$UV_CHECK >> $GITHUB_OUTPUT
         echo $GITHUB_OUTPUT
     - name: Update uv lock
