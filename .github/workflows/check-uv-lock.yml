@@ -48,7 +48,7 @@ jobs:
         path: bopen/edh-catalogue-deploy
         assignees: ${{ github.actor }}
     - name: Fail if uv lock is not up to date
-      if: ${{ github.action == 'workflow_call' && steps.check-update-uv-lock.outputs.uv-lock == 'true' }}
+      if: ${{ github.event == 'workflow_call' && steps.check-update-uv-lock.outputs.uv-lock == 'true' }}
       run: |
         echo "A Pull Request has been opened to update the uv lock file."
         exit 1
