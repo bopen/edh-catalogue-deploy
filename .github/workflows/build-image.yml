@@ -33,7 +33,7 @@ jobs:
       with:
         repo: bopen/edh-catalogue-deploy
         deps-list: "bopen/edh-catalogue-api bopen/edh-catalogue-manager"
-        deps-version-file: bopen/edh-catalogue-deploy/environment.release
+        deps-versions-file: bopen/edh-catalogue-deploy/environment.release
         git-pat: ${{ secrets.GIT_PAT }}
     - name: Check if uv lock is up to date
       id: check_uv_lock
@@ -74,7 +74,7 @@ jobs:
       with:
         repo: bopen/edh-catalogue-deploy
         deps-list: "bopen/edh-catalogue-api bopen/edh-catalogue-manager"
-        deps-version-file: bopen/edh-catalogue-deploy/environment.release
+        deps-versions-file: bopen/edh-catalogue-deploy/environment.release
         git-pat: ${{ secrets.GIT_PAT }}
     - name: Harbor login
       uses: docker/login-action@v3
