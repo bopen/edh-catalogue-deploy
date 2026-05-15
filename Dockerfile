@@ -19,7 +19,7 @@ COPY edh-catalogue-api /src/bopen/edh-catalogue-api
 COPY edh-catalogue-manager /src/bopen/edh-catalogue-manager
 COPY edh-catalogue-deploy /src/bopen/edh-catalogue-deploy
 
-WORKDIR /src/bopen/edh-catalogue-deploy
+WORKDIR /src
 
 RUN uv sync --frozen --all-extras
 
