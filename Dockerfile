@@ -7,6 +7,10 @@ ENV UV_COMPILE_BYTECODE=1 \
     UV_PROJECT_ENVIRONMENT=/venv \
     UV_PROJECT=/src/bopen/edh-catalogue-deploy
 
+# get git-clone-ref.py script
+WORKDIR /tmp
+RUN uv run --with httpie http --download https://raw.githubusercontent.com/bopen/ci-cd/refs/heads/main/git-clone/git-clone-ref.py
+
 COPY edh-catalogue-api /src/bopen/edh-catalogue-api
 COPY edh-catalogue-manager /src/bopen/edh-catalogue-manager
 COPY edh-catalogue-deploy /src/bopen/edh-catalogue-deploy
