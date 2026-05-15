@@ -9,6 +9,7 @@ ENV UV_COMPILE_BYTECODE=1 \
     UV_PROJECT=/src/bopen/edh-catalogue-deploy
 
 # get git-clone-ref.py script
+# FIXME: only download the script, not the whole repo
 RUN apt update && apt install -y git
 WORKDIR /tmp
 RUN git clone --depth 1 https://github.com/bopen/ci-cd.git
