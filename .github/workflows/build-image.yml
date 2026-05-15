@@ -53,7 +53,7 @@ jobs:
       with:
         commit-message: "🤖 Update uv lock"
         title: "🤖 Update uv lock"
-        body: "This Pull Request has been automatically created by the workflow to update the uv lock file."
+        body: "This Pull Request has been automatically created by the workflow to update the `uv.lock` file."
         base: main
         branch: update-uv-lock
         path: bopen/edh-catalogue-deploy
