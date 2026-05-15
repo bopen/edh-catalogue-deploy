@@ -50,45 +50,45 @@ jobs:
         uv lock --check && UV_CHECK='ok' || UV_CHECK='not_ok'
         echo "UV_CHECK=$UV_CHECK" >> $GITHUB_OUTPUT
         cat $GITHUB_OUTPUT
-    - name: Checkout update-uv-lock branch
-      if: steps.check_uv_lock.outputs.UV_CHECK == 'not_ok'
-      run: |
-        cd bopen/edh-catalogue-deploy
-        git config user.name "github-actions"
-        git config user.email ""
-        git fetch origin
-        if git ls-remote --exit-code origin update-uv-lock; then
-          echo "Branch update-uv-lock already exists, checking it out."
-          git checkout update-uv-lock
-        else
-          echo "Branch update-uv-lock does not exist, creating it."
-          git checkout -b update-uv-lock
-        fi
+    # - name: Checkout update-uv-lock branch
+    #   if: steps.check_uv_lock.outputs.UV_CHECK == 'not_ok'
+    #   run: |
+    #     cd bopen/edh-catalogue-deploy
+    #     git config user.name "github-actions"
+    #     git config user.email ""
+    #     git fetch origin
+    #     if git ls-remote --exit-code origin update-uv-lock; then
+    #       echo "Branch update-uv-lock already exists, checking it out."
+    #       git checkout update-uv-lock
+    #     else
+    #       echo "Branch update-uv-lock does not exist, creating it."
+    #       git checkout -b update-uv-lock
+    #     fi
     - name: Update uv lock
       if: steps.check_uv_lock.outputs.UV_CHECK == 'not_ok'
       run: |
         cd bopen/edh-catalogue-deploy
         uv lock
-    - name: Commit and push uv lock changes
-      if: steps.check_uv_lock.outputs.UV_CHECK == 'not_ok'
-      run: |
-        cd bopen/edh-catalogue-deploy
-        git diff
-        git add uv.lock
-        git commit -m "🤖 Update uv lock" || echo "Nothing to commit"
-        git push origin update-uv-lock --force
-    # - name: Create Pull Request
+    # - name: Commit and push uv lock changes
     #   if: steps.check_uv_lock.outputs.UV_CHECK == 'not_ok'
-    #   uses: peter-evans/create-pull-request@v5
-    #   with:
-    #     token: ${{ secrets.GIT_PAT }}
-    #     commit-message: "🤖 Update uv lock"
-    #     title: "🤖 Update uv lock"
-    #     body: "This Pull Request has been automatically created by the workflow to update the uv lock file."
-    #     base: main
-    #     branch: update-uv-lock
-    #     path: bopen/edh-catalogue-deploy
-    #     assignees: francesconazzaro
+    #   run: |
+    #     cd bopen/edh-catalogue-deploy
+    #     git diff
+    #     git add uv.lock
+    #     git commit -m "🤖 Update uv lock" || echo "Nothing to commit"
+    #     git push origin update-uv-lock --force
+    - name: Create Pull Request
+      if: steps.check_uv_lock.outputs.UV_CHECK == 'not_ok'
+      uses: peter-evans/create-pull-request@v5
+      with:
+        token: ${{ secrets.GIT_PAT }}
+        commit-message: "🤖 Update uv lock"
+        title: "🤖 Update uv lock"
+        body: "This Pull Request has been automatically created by the workflow to update the uv lock file."
+        base: main
+        branch: update-uv-lock
+        path: bopen/edh-catalogue-deploy
+        assignees: francesconazzaro
     - name: Fail if uv lock is not up to date
       if: steps.check_uv_lock.outputs.UV_CHECK == 'not_ok'
       run: |
