@@ -1,15 +1,13 @@
 name: check-uv-lock
 
 on:
+  pull_request:
+    branches: 
+    - main
+    types: [closed]
+
   workflow_dispatch:
   workflow_call:
-    inputs:
-      fail-on-uv-lock-update:
-        description: 'Whether to fail the workflow if the uv lock file is not up to date'
-        required: false
-        type: boolean
-        default: true
-
 
 # concurrency:
 #   group: ${{ github.workflow }}-${{ github.ref }}
@@ -50,7 +48,7 @@ jobs:
         path: bopen/edh-catalogue-deploy
         assignees: ${{ github.actor }}
     - name: Fail if uv lock is not up to date
-      if: ${{ inputs.fail-on-uv-lock-update == 'true' && steps.check-update-uv-lock.outputs.uv-lock == 'true' }}
+      if: ${{ github.action == 'workflow_call' && steps.check-update-uv-lock.outputs.uv-lock == 'true' }}
       run: |
         echo "A Pull Request has been opened to update the uv lock file."
         exit 1
