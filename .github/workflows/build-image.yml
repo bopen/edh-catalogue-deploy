@@ -28,20 +28,12 @@ jobs:
     name: Check if uv lock is up to date
     runs-on: ubuntu-latest
     steps:
-    - name: Clone edh-catalogue-deploy repository
-      uses: actions/checkout@v4
+    - name: Checkout repositories
+      uses: bopen/ci-cd/setup-deploy@main
       with:
-        token: ${{ secrets.GIT_PAT }}
-        path: bopen/edh-catalogue-deploy
-    - name: Load environment variables from environment.release file
-      run: |
-        # grep -v '^#' ignores comment lines
-        # grep -v '^$' ignores empty lines
-        grep -v '^#' bopen/edh-catalogue-deploy/environment.release | grep -v '^$' >> $GITHUB_ENV
-    - name: Clone edh-catalogue-api and edh-catalogue-manager repositories
-      uses: bopen/ci-cd/git-clone@main
-      with:
-        repo-list: "bopen/edh-catalogue-api bopen/edh-catalogue-manager"
+        repo: bopen/edh-catalogue-deploy
+        deps-list: "bopen/edh-catalogue-api bopen/edh-catalogue-manager"
+        deps-version-file: bopen/edh-catalogue-deploy/environment.release
         git-pat: ${{ secrets.GIT_PAT }}
     - name: Check if uv lock is up to date
       id: check_uv_lock
@@ -50,33 +42,11 @@ jobs:
         uv lock --check && UV_CHECK='ok' || UV_CHECK='not_ok'
         echo "UV_CHECK=$UV_CHECK" >> $GITHUB_OUTPUT
         cat $GITHUB_OUTPUT
-    # - name: Checkout update-uv-lock branch
-    #   if: steps.check_uv_lock.outputs.UV_CHECK == 'not_ok'
-    #   run: |
-    #     cd bopen/edh-catalogue-deploy
-    #     git config user.name "github-actions"
-    #     git config user.email ""
-    #     git fetch origin
-    #     if git ls-remote --exit-code origin update-uv-lock; then
-    #       echo "Branch update-uv-lock already exists, checking it out."
-    #       git checkout update-uv-lock
-    #     else
-    #       echo "Branch update-uv-lock does not exist, creating it."
-    #       git checkout -b update-uv-lock
-    #     fi
     - name: Update uv lock
       if: steps.check_uv_lock.outputs.UV_CHECK == 'not_ok'
       run: |
         cd bopen/edh-catalogue-deploy
         uv lock
-    # - name: Commit and push uv lock changes
-    #   if: steps.check_uv_lock.outputs.UV_CHECK == 'not_ok'
-    #   run: |
-    #     cd bopen/edh-catalogue-deploy
-    #     git diff
-    #     git add uv.lock
-    #     git commit -m "🤖 Update uv lock" || echo "Nothing to commit"
-    #     git push origin update-uv-lock --force
     - name: Create Pull Request
       if: steps.check_uv_lock.outputs.UV_CHECK == 'not_ok'
       uses: peter-evans/create-pull-request@v5
@@ -100,6 +70,13 @@ jobs:
     needs: check-uv-lock
     runs-on: ubuntu-latest
     steps:
+    - name: Checkout repositories
+      uses: bopen/ci-cd/setup-deploy@main
+      with:
+        repo: bopen/edh-catalogue-deploy
+        deps-list: "bopen/edh-catalogue-api bopen/edh-catalogue-manager"
+        deps-version-file: bopen/edh-catalogue-deploy/environment.release
+        git-pat: ${{ secrets.GIT_PAT }}
     - name: Harbor login
       uses: docker/login-action@v3
       with:
