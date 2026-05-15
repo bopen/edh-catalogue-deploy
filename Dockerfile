@@ -1,4 +1,5 @@
 FROM --platform=linux/amd64 ghcr.io/astral-sh/uv:python3.12-bookworm-slim
+ARG GIT_PAT
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -8,8 +9,10 @@ ENV UV_COMPILE_BYTECODE=1 \
     UV_PROJECT=/src/bopen/edh-catalogue-deploy
 
 # get git-clone-ref.py script
+RUN apt update && apt install -y git
 WORKDIR /tmp
-RUN uv run --with httpie http --download https://raw.githubusercontent.com/bopen/ci-cd/refs/heads/main/git-clone/git-clone-ref.py
+RUN git clone --depth 1 https://github.com/bopen/ci-cd.git
+RUN mv ci-cd/git-clone-ref.py /tmp
 
 COPY edh-catalogue-api /src/bopen/edh-catalogue-api
 COPY edh-catalogue-manager /src/bopen/edh-catalogue-manager
