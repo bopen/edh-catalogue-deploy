@@ -81,7 +81,7 @@ jobs:
       if: steps.check_uv_lock.outputs.UV_CHECK == 'not_ok'
       uses: peter-evans/create-pull-request@v5
       with:
-        token: ${{ secrets.GIT_PAT }}
+        # token: ${{ secrets.GIT_PAT }}
         commit-message: "🤖 Update uv lock"
         title: "🤖 Update uv lock"
         body: "This Pull Request has been automatically created by the workflow to update the uv lock file."
