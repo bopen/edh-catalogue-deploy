@@ -35,20 +35,13 @@ jobs:
         deps-list: "bopen/edh-catalogue-api bopen/edh-catalogue-manager"
         deps-versions-file: bopen/edh-catalogue-deploy/environment.release
         git-pat: ${{ secrets.GIT_PAT }}
-    - name: Check if uv lock is up to date
-      id: check_uv_lock
-      run: |
-        cd bopen/edh-catalogue-deploy
-        uv lock --check && UV_CHECK='ok' || UV_CHECK='not_ok'
-        echo "UV_CHECK=$UV_CHECK" >> $GITHUB_OUTPUT
-        cat $GITHUB_OUTPUT
-    - name: Update uv lock
-      if: steps.check_uv_lock.outputs.UV_CHECK == 'not_ok'
-      run: |
-        cd bopen/edh-catalogue-deploy
-        uv lock
+    - name: Check and update uv lock
+      id: check-update-uv-lock
+      uses: bopen/ci-cd/check-update-uv-lock@main
+      with:
+        repo-path: bopen/edh-catalogue-deploy
     - name: Create Pull Request
-      if: steps.check_uv_lock.outputs.UV_CHECK == 'not_ok'
+      if: steps.check-update-uv-lock.outputs.uv-lock == 'true'
       uses: peter-evans/create-pull-request@v5
       with:
         commit-message: "🤖 Update uv lock"
@@ -59,7 +52,7 @@ jobs:
         path: bopen/edh-catalogue-deploy
         assignees: francesconazzaro
     - name: Fail if uv lock is not up to date
-      if: steps.check_uv_lock.outputs.UV_CHECK == 'not_ok'
+      if: steps.check-update-uv-lock.outputs.uv-lock == 'true'
       run: |
         echo "A Pull Request has been opened to update the uv lock file."
         exit 1
