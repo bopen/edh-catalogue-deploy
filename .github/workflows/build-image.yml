@@ -26,6 +26,7 @@ jobs:
 
   check-uv-lock:
     name: Check if uv lock is up to date
+    secrets: inherit
     uses: bopen/edh-catalogue-deploy/.github/workflows/check-uv-lock.yml@main
 
   build-docker-image:
