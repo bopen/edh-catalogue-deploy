@@ -77,18 +77,18 @@ jobs:
         git add uv.lock
         git commit -m "🤖 Update uv lock" || echo "Nothing to commit"
         git push origin update-uv-lock --force
-    - name: Create Pull Request
-      if: steps.check_uv_lock.outputs.UV_CHECK == 'not_ok'
-      uses: peter-evans/create-pull-request@v5
-      with:
-        token: ${{ secrets.GIT_PAT }}
-        commit-message: "🤖 Update uv lock"
-        title: "🤖 Update uv lock"
-        body: "This Pull Request has been automatically created by the workflow to update the uv lock file."
-        base: main
-        branch: update-uv-lock
-        path: bopen/edh-catalogue-deploy
-        assignees: francesconazzaro
+    # - name: Create Pull Request
+    #   if: steps.check_uv_lock.outputs.UV_CHECK == 'not_ok'
+    #   uses: peter-evans/create-pull-request@v5
+    #   with:
+    #     token: ${{ secrets.GIT_PAT }}
+    #     commit-message: "🤖 Update uv lock"
+    #     title: "🤖 Update uv lock"
+    #     body: "This Pull Request has been automatically created by the workflow to update the uv lock file."
+    #     base: main
+    #     branch: update-uv-lock
+    #     path: bopen/edh-catalogue-deploy
+    #     assignees: francesconazzaro
     - name: Fail if uv lock is not up to date
       if: steps.check_uv_lock.outputs.UV_CHECK == 'not_ok'
       run: |
