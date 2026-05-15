@@ -567,13 +567,13 @@ name = "edh-catalogue-deploy"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
-    { name = "edh-catalogue-api" },
+    { name = "edh-catalogue-api", extra = ["server"] },
     { name = "edh-catalogue-manager" },
 ]
 
 [package.metadata]
 requires-dist = [
-    { name = "edh-catalogue-api", editable = "../edh-catalogue-api" },
+    { name = "edh-catalogue-api", extras = ["server"], editable = "../edh-catalogue-api" },
     { name = "edh-catalogue-manager", editable = "../edh-catalogue-manager" },
 ]
 
