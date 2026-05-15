@@ -13,7 +13,7 @@ ENV UV_COMPILE_BYTECODE=1 \
 RUN apt update && apt install -y git
 WORKDIR /tmp
 RUN git clone --depth 1 https://github.com/bopen/ci-cd.git
-RUN mv ci-cd/git-clone-ref.py /tmp
+RUN mv ci-cd/git-clone/git-clone-ref.py /tmp
 
 COPY edh-catalogue-api /src/bopen/edh-catalogue-api
 COPY edh-catalogue-manager /src/bopen/edh-catalogue-manager
