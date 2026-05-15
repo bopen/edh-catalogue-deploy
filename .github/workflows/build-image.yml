@@ -50,7 +50,7 @@ jobs:
         base: main
         branch: update-uv-lock
         path: bopen/edh-catalogue-deploy
-        assignees: francesconazzaro
+        assignees: ${{ github.actor }}
     - name: Fail if uv lock is not up to date
       if: steps.check-update-uv-lock.outputs.uv-lock == 'true'
       run: |
