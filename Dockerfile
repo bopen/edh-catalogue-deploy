@@ -10,14 +10,12 @@ ENV UV_COMPILE_BYTECODE=1 \
 
 WORKDIR /src
 
-# get git-clone-ref.py script
-# FIXME: only download the script, not the whole repo
+# install git-clone-ref.py dependencies
 RUN apt update && apt install -y git \
     && apt clean
 
-RUN git clone --depth 1 https://github.com/bopen/ci-cd.git /tmp/ci-cd \
-    && mv /tmp/ci-cd/git-clone/git-clone-ref.py /tmp \
-    && rm -rf /tmp/ci-cd
+# get git-clone-ref.py script
+COPY ./git-clone-ref.py /tmp/git-clone-ref.py
 
 COPY edh-catalogue-api /src/bopen/edh-catalogue-api
 COPY edh-catalogue-manager /src/bopen/edh-catalogue-manager
