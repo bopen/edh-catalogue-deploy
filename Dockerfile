@@ -1,4 +1,5 @@
 FROM --platform=linux/amd64 ubuntu:26.04
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 ARG GIT_PAT
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -15,9 +16,6 @@ RUN apt update && apt upgrade -y \
     && apt install -y git \
     && apt clean
 
-# Install uv
-RUN curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR=/usr/local/bin sh
-
 # get git-clone-ref.py script
 COPY ./git-clone-ref.py /tmp/git-clone-ref.py
 
@@ -33,3 +31,4 @@ RUN uv sync --frozen --all-extras \
 EXPOSE 8000
 
 CMD ["uv", "run", "uvicorn", "--host", "0.0.0.0", "--port", "8000", "edh_catalogue_api.app:app"]
+
