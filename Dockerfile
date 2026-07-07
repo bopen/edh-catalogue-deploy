@@ -16,7 +16,7 @@ RUN apt update && apt install -y git \
     && apt clean
 
 # remove pebble to avoid golang related CVEs
-RUN apt-get remove -y pebble
+RUN rm -f /usr/bin/pebble && rm -rf /var/lib/pebble
 
 # get git-clone-ref.py script
 COPY ./git-clone-ref.py /tmp/git-clone-ref.py
