@@ -16,7 +16,7 @@ RUN apt update && apt upgrade -y \
     && apt clean
 
 # Install uv
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+RUN curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR=/usr/local/bin sh
 
 # get git-clone-ref.py script
 COPY ./git-clone-ref.py /tmp/git-clone-ref.py
