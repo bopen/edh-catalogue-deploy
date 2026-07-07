@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 ghcr.io/astral-sh/uv:trixie-slim
+FROM --platform=linux/amd64 ubuntu:26.04
 ARG GIT_PAT
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -14,6 +14,9 @@ WORKDIR /src
 RUN apt update && apt upgrade -y \
     && apt install -y git \
     && apt clean
+
+# Install uv
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # get git-clone-ref.py script
 COPY ./git-clone-ref.py /tmp/git-clone-ref.py
