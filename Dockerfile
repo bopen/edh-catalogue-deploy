@@ -12,9 +12,11 @@ ENV UV_COMPILE_BYTECODE=1 \
 WORKDIR /src
 
 # install git-clone-ref.py dependencies
-RUN apt update && apt upgrade -y \
-    && apt install -y git \
+RUN apt update && apt install -y git \
     && apt clean
+
+# remove pebble to avoid golang related CVEs
+RUN apt-get remove -y pebble
 
 # get git-clone-ref.py script
 COPY ./git-clone-ref.py /tmp/git-clone-ref.py
@@ -31,4 +33,5 @@ RUN uv sync --frozen --all-extras \
 EXPOSE 8000
 
 CMD ["uv", "run", "uvicorn", "--host", "0.0.0.0", "--port", "8000", "edh_catalogue_api.app:app"]
+
 
