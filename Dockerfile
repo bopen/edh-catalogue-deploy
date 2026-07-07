@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 ghcr.io/astral-sh/uv:python3.12-bookworm-slim
+FROM --platform=linux/amd64 ghcr.io/astral-sh/uv:trixie-slim
 ARG GIT_PAT
 
 ENV DEBIAN_FRONTEND=noninteractive
