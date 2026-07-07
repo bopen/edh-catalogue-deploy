@@ -11,7 +11,8 @@ ENV UV_COMPILE_BYTECODE=1 \
 WORKDIR /src
 
 # install git-clone-ref.py dependencies
-RUN apt update && apt install -y git \
+RUN apt update && apt upgrade -y \
+    && apt install -y git \
     && apt clean
 
 # get git-clone-ref.py script
