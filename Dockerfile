@@ -1,6 +1,5 @@
 FROM --platform=linux/amd64 ubuntu:26.04
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
-ARG GIT_PAT
 
 ENV DEBIAN_FRONTEND=noninteractive
 
