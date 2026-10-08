@@ -17,6 +17,11 @@ RUN apt update && apt install -y git \
 # remove pebble to avoid golang related CVEs
 RUN rm -f /usr/bin/pebble && rm -rf /var/lib/pebble
 
+# Fix CVE-2026-84782
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends libssl3t64 && \
+    rm -rf /var/lib/apt/lists/*
+
 # get git-clone-ref.py script
 COPY ./git-clone-ref.py /tmp/git-clone-ref.py
 
