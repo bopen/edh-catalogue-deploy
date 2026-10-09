@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 ubuntu:26.04
+FROM ubuntu:26.04
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -33,6 +33,11 @@ COPY edh-catalogue-deploy /src/bopen/edh-catalogue-deploy
 # but delete the virtual environment to save space, it will be re-created during uv run.
 RUN uv sync --frozen --all-extras \
     && rm -rf /venv
+
+# pip is not used at runtime; removes pip-vendored packages to reduce vulnerability surface
+RUN rm -rf /root/.local/share/uv/python/*/lib/python*/site-packages/pip \
+           /root/.local/share/uv/python/*/lib/python*/site-packages/pip-*.dist-info \
+           /root/.local/share/uv/python/*/lib/python*/ensurepip
 
 EXPOSE 8000
 
