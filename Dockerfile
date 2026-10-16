@@ -22,6 +22,12 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends libssl3t64 && \
     rm -rf /var/lib/apt/lists/*
 
+# Fix CVE-2026-92392 (curl HTTP/2 upload use-after-free, USN-8927-1)
+# libcurl3t64-gnutls is pulled in by git; fixed version is 8.18.0-1ubuntu2.8
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends libcurl3t64-gnutls && \
+    rm -rf /var/lib/apt/lists/*
+
 # get git-clone-ref.py script
 COPY ./git-clone-ref.py /tmp/git-clone-ref.py
 
