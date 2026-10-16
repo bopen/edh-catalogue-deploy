@@ -29,7 +29,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # get git-clone-ref.py script
-# COPY ./git-clone-ref.py /tmp/git-clone-ref.py
+COPY ./git-clone-ref.py /tmp/git-clone-ref.py
 
 COPY edh-catalogue-api /src/bopen/edh-catalogue-api
 COPY edh-catalogue-manager /src/bopen/edh-catalogue-manager
