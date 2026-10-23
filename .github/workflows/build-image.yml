@@ -119,32 +119,42 @@ jobs:
         cat grype-report-edh-catalogue-api-${{ github.run_id }}.txt >> $GITHUB_STEP_SUMMARY
         echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
 
-  release-e2e:
-    name: Trigger GitLab pipeline for release-edh-catalogue-api-e2e
+  release-e2e-command:
+    name: Copy curl command to trigger GitLab pipeline for release-edh-catalogue-api-e2e
     runs-on: ubuntu-latest
     needs: build-docker-image
     if: github.event_name == 'push'
     steps:
-    - name: Trigger GitLab pipeline
+    - name: Copy command
       run: |
-        curl -X POST -F "token=${{ secrets.DESP_GITLAB_TOKEN }}" \
+        echo "# Gitlab pipeline trigger command for release-edh-catalogue-api-e2e" >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+        echo 'curl -X POST -F "token=${DESP_GITLAB_TOKEN}" \
              -F "ref=main" \
-             -F "variables[EDH_CATALOGUE_API_E2E_TAG]=${{ env.IMAGE_TAG }}" \
-             ${{ vars.DESP_GITLAB_URL }}
+             -F "variables[EDH_CATALOGUE_API_E2E_TAG]=${IMAGE_TAG}" \
+             ${DESP_GITLAB_URL}' >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
       env:
         DESP_GITLAB_TOKEN: ${{ secrets.DESP_GITLAB_TOKEN }}
+        IMAGE_TAG: ${{ env.IMAGE_TAG }}
+        DESP_GITLAB_URL: ${{ vars.DESP_GITLAB_URL }}
 
-  release-dev:
-    name: Trigger GitLab pipeline for release-edh-catalogue-api-dev
+  release-dev-command:
+    name: Copy curl command to trigger GitLab pipeline for release-edh-catalogue-api-dev
     runs-on: ubuntu-latest
     needs: build-docker-image
     if: github.event_name == 'workflow_dispatch'
     steps:
-    - name: Trigger GitLab pipeline
+    - name: Copy command
       run: |
-        curl -X POST -F "token=${{ secrets.DESP_GITLAB_TOKEN }}" \
+        echo "# Gitlab pipeline trigger command for release-edh-catalogue-api-dev" >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+        echo 'curl -X POST -F "token=${DESP_GITLAB_TOKEN}" \
              -F "ref=main" \
-             -F "variables[EDH_CATALOGUE_API_DEV_TAG]=${{ env.IMAGE_TAG }}" \
-             https://forge.dev.desp.space/api/v4/projects/92/trigger/pipeline
+             -F "variables[EDH_CATALOGUE_API_DEV_TAG]=${IMAGE_TAG}" \
+             ${DESP_GITLAB_URL}' >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
       env:
         DESP_GITLAB_TOKEN: ${{ secrets.DESP_GITLAB_TOKEN }}
+        IMAGE_TAG: ${{ env.IMAGE_TAG }}
+        DESP_GITLAB_URL: ${{ vars.DESP_GITLAB_URL }}
