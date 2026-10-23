@@ -129,10 +129,7 @@ jobs:
       run: |
         echo "# Gitlab pipeline trigger command for release-edh-catalogue-api-e2e" >> $GITHUB_STEP_SUMMARY
         echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-        echo 'curl -X POST -F "token=${DESP_GITLAB_TOKEN}" \
-             -F "ref=main" \
-             -F "variables[EDH_CATALOGUE_API_E2E_TAG]=${IMAGE_TAG}" \
-             ${DESP_GITLAB_URL}' >> $GITHUB_STEP_SUMMARY
+        echo curl -X POST -F \"token=${DESP_GITLAB_TOKEN}\" -F \"ref=main\" -F \"variables[EDH_CATALOGUE_API_E2E_TAG]=${IMAGE_TAG}\" ${DESP_GITLAB_URL} >> $GITHUB_STEP_SUMMARY
         echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
       env:
         DESP_GITLAB_TOKEN: ${{ secrets.DESP_GITLAB_TOKEN }}
@@ -149,10 +146,7 @@ jobs:
       run: |
         echo "# Gitlab pipeline trigger command for release-edh-catalogue-api-dev" >> $GITHUB_STEP_SUMMARY
         echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-        echo 'curl -X POST -F "token=${DESP_GITLAB_TOKEN}" \
-             -F "ref=main" \
-             -F "variables[EDH_CATALOGUE_API_DEV_TAG]=${IMAGE_TAG}" \
-             ${DESP_GITLAB_URL}' >> $GITHUB_STEP_SUMMARY
+        echo curl -X POST -F \"token=${DESP_GITLAB_TOKEN}\" -F \"ref=main\" -F \"variables[EDH_CATALOGUE_API_DEV_TAG]=${IMAGE_TAG}\" ${DESP_GITLAB_URL} >> $GITHUB_STEP_SUMMARY
         echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
       env:
         DESP_GITLAB_TOKEN: ${{ secrets.DESP_GITLAB_TOKEN }}
